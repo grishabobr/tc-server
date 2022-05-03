@@ -1,33 +1,30 @@
+const { block } = require('./block')
+
+
+
+block('Your exiting message!')
+
 const express = require("express");
 const path = require("path");
 const app = express();
 const port = process.env.PORT || 4000;
+const router = require('./src/router');
+const bodyParser = require('body-parser')
 
-// serve static files built by React
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, "./client/build")));
 
-app.get("/*", function (req, res) {
+app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, "./client/build", "index.html"));
 });
 
-app.use(express.json());
-
-app.post('/tryp', function (request, response) {
-    
-    setTimeout(() => {
-        response.send({
-            index: {
-                indexFrom: "123456",
-                indexTo: "456789"
-            },
-            distance: 228,
-            price: Number(request.body.Width) + Number(request.body.Height) + Number(request.body.Length)
-        });
-    }, 1000)
-    
-});
-
+app.use('/', router);
 
 app.listen(port, () => {
     console.log('Server started on: ' + port);
 });
+
+
+

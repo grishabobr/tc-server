@@ -1,6 +1,6 @@
-function price(orderParams) {
+function price(orderParams, distance) {
 
-    let price = Number(orderParams.Width) + Number(orderParams.Height) + Number(orderParams.Length) + 1000000;
+    let price = 500+Number(orderParams.Width) + Number(orderParams.Height) + Number(orderParams.Length) + Number(orderParams.Weight) + distance;
     return (price)
 
 }

@@ -13,7 +13,7 @@ async function calculate(orderParams) {
             indexTo: geoData.indexTo
         },
         distance: geoData.distance,
-        price: priceService.price(orderParams),
+        price: priceService.price(orderParams, geoData.distance),
         deliveryDate: deliveryDateService.deliveryDate(geoData.distance)
     }
     return priceResponse;

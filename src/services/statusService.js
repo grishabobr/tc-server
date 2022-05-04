@@ -10,8 +10,16 @@ async function getStatusDate(status, orderNumber) {
     if (statusInfo.length != 0) {
         date = JSON.stringify(statusInfo[0].date).split('T')[0].substring(1);
     }
-    
+
     return(date);
+}
+
+async function getDeliveryDate(orderNumber) {
+
+    var dateInfo = await db.query('SELECT delivery_date from orders where order_number = ?',[orderNumber]);
+    let date = JSON.stringify(dateInfo[0].delivery_date).split('T')[0].substring(1);
+
+    return (date);
 }
 
 
@@ -25,7 +33,7 @@ async function check(orderNumber) {
             transit: await getStatusDate('Transit', orderNumber),
             delivered: await getStatusDate('Delivered', orderNumber)
         },
-        deliveryDate: "00.00.0000"
+        deliveryDate: await getDeliveryDate(orderNumber)
     }
 
     return statusInfo;

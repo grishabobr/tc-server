@@ -1,15 +1,12 @@
 const { block } = require('./block')
-
-
-
-block('Your exiting message!')
+block('error!')
 
 const express = require("express");
 const path = require("path");
 const app = express();
 const port = process.env.PORT || 4000;
 const router = require('./src/router');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

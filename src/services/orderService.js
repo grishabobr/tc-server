@@ -23,7 +23,6 @@ async function create(orderParams) {
 
     let addressFromId = await getAddressId(orderParams.addressFrom);
     let addressToId = await getAddressId(orderParams.addressTo);
-    console.log(addressFromId, addressToId)
 
     
 
@@ -58,4 +57,44 @@ async function create(orderParams) {
     return orderNumberResponse;
 }
 
-module.exports = { create };
+
+async function read(orderNumber) {
+
+    const readOrder = await db.query('SELECT * FROM orders WHERE order_number = ?;', [orderNumber]);
+
+    let response = 'not found';
+    if (readOrder.length !=0) response = readOrder[0];
+    
+    return response;
+}
+
+async function update(orderNumber, orderParams) {
+
+    const updateOrder = await db.query(
+        `UPDATE tc_db.orders
+        SET from_id=?, to_id=?, \`length\`=?, width=?, height=?, weight=?, delicate=?, distance=?, price=?, delivery_date=?
+        WHERE order_number=?;`,
+        [
+            orderParams.from_id, orderParams.to_id, orderParams.length, orderParams.width, orderParams.height,
+            orderParams.weight, orderParams.delicate, orderParams.distance, orderParams.price,
+            orderParams.delivery_date, orderNumber
+        ]);
+
+    let response = 'not found';
+    if (updateOrder.affectedRows != 0) response = 'success';
+
+    return response;
+}
+
+async function del(orderNumber) {
+
+    const delOrder = await db.query('DELETE FROM orders WHERE order_number = ?;', [orderNumber]);
+
+    let response = 'not found';
+    if (delOrder.affectedRows != 0) response = 'success';
+
+    return response;
+}
+
+
+module.exports = { create, read, update, del };

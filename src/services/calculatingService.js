@@ -4,9 +4,9 @@ const deliveryDateService = require('./deliveryDateService');
 
 
 
-function calculate(orderParams) {
+async function calculate(orderParams) {
 
-    let geoData = geoService.getGeoData(orderParams.From, orderParams.To);
+    const geoData = await geoService.getGeoData(orderParams.From, orderParams.To);
     let priceResponse = {
         index: {
             indexFrom: geoData.indexFrom,

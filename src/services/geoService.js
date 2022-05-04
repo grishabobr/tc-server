@@ -6,28 +6,36 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZ3Jpc2hhYm9iciIsImEiOiJja3c2amkxNG0wcjNiMnZsa
 var client = new MapboxClient(mapboxgl.accessToken);
 
 
-function getGeoData(from, to) {
+async function getGeoInfo(address) {
+    let geoInfo = (await client.geocodeForward(address,{limit:1})).entity.features[0];
+    return geoInfo;
+}
 
-//data.features[0].center[0] + ', ' + data.features[0].center[1]
+function getDistance(geoInfoFrom, geoInfoTo) {
+    let distance = Math.round(turf.distance(turf.point(geoInfoFrom.center), turf.point(geoInfoTo.center), "kilometers"));
+    return distance;
+}
+
+async function getIndex(geoInfo) {
+    let index = (await client.geocodeForward(geoInfo.center[0] + ', ' + geoInfo.center[1],{limit:1})).entity.features[0].context[0].text;
+    return index;
+}
 
 
-    var test = client.geocodeForward(from, function (err, data, res) {
+async function getGeoData(from, to) {
 
-        var test2 = client.geocodeForward(to, function (err2, data2, res2) {
+    const geoInfoFrom = await getGeoInfo(from);
+    const geoInfoTo = await getGeoInfo(to);
 
+    var distance = getDistance(geoInfoFrom, geoInfoTo);;
 
-            var dist = turf.distance(turf.point(data.features[0].center), turf.point(data2.features[0].center), "kilometers")
-            console.log('Расстояние: ' + dist + ' км');
-            console.log('Почтовый индекс 1: ' + data.features[0].context[0].text);
-            console.log('Почтовый индекс 2: ' + data2.features[0].context[0].text);
-        });
-    })
-
+    const indexFrom = await getIndex(geoInfoFrom);
+    const indexTo = await getIndex(geoInfoTo);
 
     let geoData = {
-        indexFrom: 999888,
-        indexTo: 888999,
-        distance: 898989
+        indexFrom: indexFrom,
+        indexTo: indexTo,
+        distance: distance
     };
     return geoData;
 }
@@ -35,4 +43,4 @@ function getGeoData(from, to) {
 
 
 
-module.exports = { getGeoData}
+module.exports = { getGeoData }

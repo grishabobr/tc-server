@@ -8,7 +8,7 @@ async function getAddressId(address) {
     let addressId;
 
     if (addr.length == 0) {
-        addr = await db.query('INSERT INTO tc_db.address (address, \`index\`) VALUES(?, ?);',
+        addr = await db.query('INSERT INTO address (address, \`index\`) VALUES(?, ?);',
             [address.address, address.index]);
         addressId = addr.insertId;
     } else {
@@ -42,7 +42,7 @@ async function create(orderParams) {
 
 
     const statusLog = await db.query(
-        'INSERT INTO tc_db.status_log (order_number, \`date\`, status) VALUES(?, ?, ?)',
+        'INSERT INTO status_log (order_number, \`date\`, status) VALUES(?, ?, ?)',
         [orders.insertId, new Date().toJSON().split("T")[0], 'Created']
     );
 
@@ -71,7 +71,7 @@ async function read(orderNumber) {
 async function update(orderNumber, orderParams) {
 
     const updateOrder = await db.query(
-        `UPDATE tc_db.orders
+        `UPDATE orders
         SET from_id=?, to_id=?, \`length\`=?, width=?, height=?, weight=?, delicate=?, distance=?, price=?, delivery_date=?
         WHERE order_number=?;`,
         [

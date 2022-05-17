@@ -2,7 +2,7 @@ const db = {
     host: 'localhost',
     user: 'AdminUser',
     password: '7mzHS5',
-    database: 'tc_db'
+    database: 'transport_company_db'
 };
 
 module.exports = db;

@@ -1,8 +1,9 @@
 function deliveryDate(distance) {
 
-    //console.log(new Date().toLocaleString({ timeZone: 'Europe/Moscow' }))
-    let deliveryDate = new Date().toJSON().split("T")[0];
-    return (deliveryDate)
+    let deliveryDate = new Date();
+    let lengthInDays = Math.floor(1 + distance / 300);
+    deliveryDate.setDate(deliveryDate.getDate() + lengthInDays);
+    return (deliveryDate.toJSON().split("T")[0])
 
 }
 
